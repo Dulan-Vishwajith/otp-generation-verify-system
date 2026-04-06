@@ -103,7 +103,7 @@ public class OtpService {
         String message = "Your OTP is " + otp;
 
         //token
-        String apiToken = "2814|lfJWWUElgr2uWRMdHnZkBBafE24EBjnB65u0BuwIbd643b5c ";
+        String apiToken = "My Token";
 
         String url = apiUrl +
                 "?recipient="+ phoneNumber+
