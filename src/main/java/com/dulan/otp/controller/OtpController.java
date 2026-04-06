@@ -6,7 +6,7 @@ import com.dulan.otp.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/otp")
 public class OtpController {
