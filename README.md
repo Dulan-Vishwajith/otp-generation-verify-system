@@ -13,6 +13,74 @@ This project is a **Spring Boot backend application** that provides a complete *
 👉 This project demonstrates a **real-world backend system** with full API flow.
 
 ---
+## 🌿 Branching Strategy
+
+This project follows a **feature-based branching strategy** to keep development organized and modular.
+
+### 🔹 Branches
+
+* **main**
+
+  * Contains the stable base version of the project
+  * Includes core OTP generation and verification logic
+
+* **dto**
+
+  * Introduces DTO (Data Transfer Object) pattern
+  * Refactors API to use `@RequestBody` instead of request parameters
+
+* **sms**
+
+  * Adds SMS functionality using Text.lk API
+  * Sends OTP directly to user’s phone
+
+* **database**
+
+  * Integrates MySQL database using Spring Data JPA
+  * Replaces in-memory storage with persistent storage
+
+---
+
+### 🔄 Development Flow
+
+```text
+main → dto → sms → database
+```
+
+Each feature was developed in isolation and can be merged progressively into the main branch.
+
+---
+
+### 💡 Benefits
+
+* Better code organization
+* Easier debugging and testing
+* Clear feature history
+* Scalable for team collaboration
+
+---
+
+### 🚀 Example Workflow
+
+```bash
+# create new branch
+git checkout -b sms
+
+# make changes
+git add .
+git commit -m "Add SMS integration"
+
+# push to GitHub
+git push origin sms
+```
+
+---
+
+### 📌 Note
+
+Each branch represents a **learning milestone** in building the OTP system step-by-step.
+
+---
 
 ## 🧩 Features
 
