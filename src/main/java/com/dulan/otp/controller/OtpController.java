@@ -2,6 +2,7 @@ package com.dulan.otp.controller;
 
 import com.dulan.otp.dto.GenerateOtpRequest;
 import com.dulan.otp.dto.VerifyOtpRequest;
+import com.dulan.otp.repository.OtpRepository;
 import com.dulan.otp.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
