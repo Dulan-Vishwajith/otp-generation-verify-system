@@ -2,96 +2,22 @@
 
 ## 🚀 Overview
 
-This project is a **Spring Boot backend application** that provides a complete **OTP (One-Time Password) system** with:
+This project is a **Spring Boot backend application** that implements a complete **OTP (One-Time Password) system** with real-world features such as SMS delivery, expiration handling, and database persistence.
 
-* OTP generation
-* OTP verification
-* SMS sending via Text.lk API
-* Expiration handling
-* Database storage using MySQL
-
-👉 This project demonstrates a **real-world backend system** with full API flow.
-
----
-## 🌿 Branching Strategy
-
-This project follows a **feature-based branching strategy** to keep development organized and modular.
-
-### 🔹 Branches
-
-* **main**
-
-  * Contains the stable base version of the project
-  * Includes core OTP generation and verification logic
-
-* **dto**
-
-  * Introduces DTO (Data Transfer Object) pattern
-  * Refactors API to use `@RequestBody` instead of request parameters
-
-* **sms**
-
-  * Adds SMS functionality using Text.lk API
-  * Sends OTP directly to user’s phone
-
-* **database**
-
-  * Integrates MySQL database using Spring Data JPA
-  * Replaces in-memory storage with persistent storage
-
----
-
-### 🔄 Development Flow
-
-```text
-main → dto → sms → database
-```
-
-Each feature was developed in isolation and can be merged progressively into the main branch.
-
----
-
-### 💡 Benefits
-
-* Better code organization
-* Easier debugging and testing
-* Clear feature history
-* Scalable for team collaboration
-
----
-
-### 🚀 Example Workflow
-
-```bash
-# create new branch
-git checkout -b sms
-
-# make changes
-git add .
-git commit -m "Add SMS integration"
-
-# push to GitHub
-git push origin sms
-```
-
----
-
-### 📌 Note
-
-Each branch represents a **learning milestone** in building the OTP system step-by-step.
+It demonstrates a full backend workflow from **API design → business logic → external integration → database storage**.
 
 ---
 
 ## 🧩 Features
 
 * ✅ Generate OTP
-* ✅ Send OTP via SMS
+* ✅ Send OTP via SMS (Text.lk)
 * ✅ Verify OTP
 * ✅ OTP expiration (2 minutes)
 * ✅ Store OTP in MySQL database
-* ✅ Clean architecture (Controller → Service → Repository)
+* ✅ Clean layered architecture
 * ✅ DTO-based request handling
-* ✅ Frontend integration (HTML + JavaScript)
+* ✅ Simple frontend integration (HTML + JS)
 
 ---
 
@@ -101,7 +27,40 @@ Each branch represents a **learning milestone** in building the OTP system step-
 * **Database:** MySQL
 * **ORM:** Spring Data JPA (Hibernate)
 * **SMS Gateway:** Text.lk API
-* **Frontend (Basic):** HTML, JavaScript (Fetch API)
+* **Frontend (Basic):** HTML + JavaScript (Fetch API)
+
+---
+
+## 🌿 Branching Strategy
+
+This project follows a **feature-based branching strategy with descriptive naming**.
+
+### 🔹 Branches
+
+* **main**
+  Base stable version
+
+* **dto/use_dto**
+  Introduces DTO pattern using `@RequestBody`
+
+* **external_API/to_send_SMS**
+  Integrates SMS sending via Text.lk API
+
+* **use_database/instead_hashmap**
+  Replaces in-memory storage with MySQL database
+
+---
+
+### 🔄 Development Flow
+
+```text
+main
+ ├── dto/use_dto
+ ├── external_API/to_send_SMS
+ └── use_database/instead_hashmap
+```
+
+Each branch represents a **progressive enhancement of the system**.
 
 ---
 
@@ -111,51 +70,37 @@ Each branch represents a **learning milestone** in building the OTP system step-
 src/main/java/com/dulan/otp/
 
 ├── controller/
-│   └── OtpController.java
-│
 ├── service/
-│   └── OtpService.java
-│
 ├── repository/
-│   └── OtpRepository.java
-│
 ├── entity/
-│   └── OtpEntity.java
-│
 ├── dto/
-│   ├── GenerateOtpRequest.java
-│   └── VerifyOtpRequest.java
-│
-└── model/ (optional for earlier step)
-    └── OtpData.java
+└── model/ (legacy - optional)
 ```
 
 ---
 
 ## ⚙️ Setup Instructions
 
-### 1️⃣ Clone Project
+### 1️⃣ Clone Repository
 
-```
+```bash
 git clone https://github.com/your-username/otp-service.git
 cd otp-service
 ```
 
 ---
 
-### 2️⃣ Configure MySQL
+### 2️⃣ Setup Database
 
-Create database:
-
-```
+```sql
 CREATE DATABASE otp_db;
 ```
 
 ---
 
-### 3️⃣ Update `application.properties`
+### 3️⃣ Configure Application
 
-```
+```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/otp_db
 spring.datasource.username=root
 spring.datasource.password=YOUR_PASSWORD
@@ -168,9 +113,7 @@ spring.jpa.show-sql=true
 
 ### 4️⃣ Add SMS API Token
 
-Inside `OtpService.java`:
-
-```
+```java
 String apiToken = "YOUR_TEXTLK_API_TOKEN";
 ```
 
@@ -178,7 +121,7 @@ String apiToken = "YOUR_TEXTLK_API_TOKEN";
 
 ### 5️⃣ Run Application
 
-```
+```bash
 mvn spring-boot:run
 ```
 
@@ -190,18 +133,10 @@ mvn spring-boot:run
 
 **POST** `/otp/generate`
 
-Request Body:
-
 ```json
 {
   "phoneNumber": "947XXXXXXXX"
 }
-```
-
-Response:
-
-```
-OTP sent successfully
 ```
 
 ---
@@ -210,8 +145,6 @@ OTP sent successfully
 
 **POST** `/otp/verify`
 
-Request Body:
-
 ```json
 {
   "phoneNumber": "947XXXXXXXX",
@@ -219,21 +152,13 @@ Request Body:
 }
 ```
 
-Response:
+---
+
+### 📌 Responses
 
 ```
 OTP verified successfully ✅
-```
-
-OR
-
-```
 Invalid OTP ❌
-```
-
-OR
-
-```
 OTP expired ⏱️
 ```
 
@@ -241,7 +166,6 @@ OTP expired ⏱️
 
 ## 📩 SMS Integration
 
-* Uses **Text.lk SMS Gateway**
 * Endpoint:
 
 ```
@@ -260,35 +184,34 @@ https://app.text.lk/api/http/sms/send
 
 ## 🌐 Frontend Usage
 
-Simple HTML + JavaScript is used to:
+Basic frontend uses:
 
-* Enter phone number
-* Request OTP
-* Enter OTP
-* Verify OTP
-
-Uses:
-
-```
-fetch() API
+```javascript
+fetch()
 ```
 
-to communicate with backend.
+Flow:
+
+```
+User Input → JS → API → Response → UI
+```
 
 ---
 
-## 🔄 Flow Diagram
+## 🔄 System Flow
 
 ```
-User → Frontend (HTML/JS)
+User → Frontend
      ↓
-Fetch API (POST request)
+Fetch API (POST)
      ↓
-Spring Boot Controller
+Controller
      ↓
-Service Layer (OTP logic)
+Service (OTP Logic)
      ↓
-Database (MySQL)
+Repository
+     ↓
+MySQL Database
      ↓
 SMS API (Text.lk)
      ↓
@@ -297,239 +220,89 @@ Response → Frontend
 
 ---
 
-## 🧠 Key Concepts Learned
-
-* REST API development
-* DTO pattern (`@RequestBody`)
-* Service layer architecture
-* JPA & database persistence
-* External API integration
-* CORS handling
-* Frontend-backend communication
-
----
-
-## ⚠️ Important Notes
-
-* Phone number must be in format:
-
-```
-947XXXXXXXX
-```
-
-* OTP expires after **2 minutes**
-* OTP is deleted after successful verification
-
----
 ## 📄 File-by-File Explanation
 
-This section explains the purpose of each file in the project.
+### 📁 OtpController.java
+
+Handles HTTP requests and routes them to the service layer.
 
 ---
 
-### 📁 controller/OtpController.java
+### 📁 OtpService.java
 
-👉 **Handles incoming HTTP requests**
+Core logic:
 
-* Defines API endpoints:
-
-  * `POST /otp/generate`
-  * `POST /otp/verify`
-* Receives request data using DTO (`@RequestBody`)
-* Calls service layer to process logic
-
-💡 Think of this as:
-
-> “The entry point of the backend”
+* Generate OTP
+* Store OTP
+* Send SMS
+* Verify OTP
+* Handle expiration
 
 ---
 
-### 📁 service/OtpService.java
+### 📁 OtpRepository.java
 
-👉 **Contains business logic**
-
-Responsibilities:
-
-* Generate OTP (6-digit random number)
-* Store OTP in database
-* Set expiration time (2 minutes)
-* Send OTP via SMS (Text.lk API)
-* Verify OTP (check correctness + expiry)
-* Delete OTP after verification
-
-💡 Think of this as:
-
-> “The brain of the application”
+Handles database operations using JPA.
 
 ---
 
-### 📁 repository/OtpRepository.java
+### 📁 OtpEntity.java
 
-👉 **Handles database operations**
-
-* Extends `JpaRepository`
-* Provides built-in methods:
-
-  * `save()`
-  * `delete()`
-  * `findById()`
-* Custom method:
-
-  * `findByPhoneNumber(String phoneNumber)`
-
-💡 Think of this as:
-
-> “The communication layer with the database”
+Represents database table structure.
 
 ---
 
-### 📁 entity/OtpEntity.java
+### 📁 DTOs
 
-👉 **Represents database table**
+* `GenerateOtpRequest`
+* `VerifyOtpRequest`
 
-Fields:
-
-* `id` → Primary key
-* `phoneNumber` → User phone number
-* `otp` → Generated OTP
-* `expiryTime` → Expiration timestamp
-
-💡 Automatically mapped to a MySQL table by JPA
-
-💡 Think of this as:
-
-> “The structure of stored data”
-
----
-
-### 📁 dto/GenerateOtpRequest.java
-
-👉 **DTO for OTP generation request**
-
-* Contains:
-
-  * `phoneNumber`
-
-Used in:
-
-```id="dto1"
-POST /otp/generate
-```
-
-💡 Converts incoming JSON → Java object
-
----
-
-### 📁 dto/VerifyOtpRequest.java
-
-👉 **DTO for OTP verification**
-
-* Contains:
-
-  * `phoneNumber`
-  * `otp`
-
-Used in:
-
-```id="dto2"
-POST /otp/verify
-```
-
-💡 Keeps API clean and structured
-
----
-
-### 📁 model/OtpData.java *(Optional / earlier step)*
-
-👉 Used when OTP was stored in memory (HashMap)
-
-* Contains:
-
-  * OTP
-  * Expiry time
-
-⚠️ Not needed after database integration
+Used to transfer request data cleanly.
 
 ---
 
 ### 📁 application.properties
 
-👉 **Configuration file**
-
-Contains:
-
-* Database connection (MySQL)
-* JPA settings
-* Hibernate behavior
-
-Example:
-
-```id="cfg1"
-spring.datasource.url=jdbc:mysql://localhost:3306/otp_db
-spring.jpa.hibernate.ddl-auto=update
-```
-
-💡 Think of this as:
-
-> “Project settings and configuration”
+Stores configuration (DB, JPA, etc.)
 
 ---
 
-### 📁 Frontend (index.html + script.js)
-
-👉 Simple UI to test backend
+### 📁 Frontend Files
 
 * `index.html`
-
-  * Input fields for phone & OTP
-  * Buttons for actions
-
 * `script.js`
 
-  * Uses `fetch()` to call backend APIs
-  * Sends JSON requests
-  * Displays responses
-
-💡 Think of this as:
-
-> “User interface interacting with backend”
+Handles user interaction and API calls.
 
 ---
 
-## 🧠 Overall Architecture
+## 🧠 Architecture
 
-```id="arch1"
+```
 Controller → Service → Repository → Database
         ↓
-     DTO Layer
+      DTO Layer
         ↓
    External API (SMS)
 ```
 
 ---
 
-## 🎯 Summary
+## ⚠️ Important Notes
 
-Each layer has a clear responsibility:
-
-* **Controller** → Handles requests
-* **Service** → Processes logic
-* **Repository** → Talks to DB
-* **Entity** → Defines data
-* **DTO** → Transfers data
-* **Frontend** → Interacts with user
-
-👉 This structure follows **clean architecture principles**
+* Phone format: `947XXXXXXXX`
+* OTP expires in **2 minutes**
+* OTP is deleted after verification
 
 ---
 
 ## 🚀 Future Improvements
 
-* 🔐 Add authentication (JWT)
-* ⏳ Rate limiting (prevent spam)
-* ⚡ Use Redis for OTP storage
-* 🎨 Build React frontend
-* ☁️ Deploy to cloud (AWS / Render)
+* 🔐 JWT Authentication
+* ⏳ Rate Limiting
+* ⚡ Redis for OTP storage
+* 🎨 React frontend
+* ☁️ Cloud deployment
 
 ---
 
@@ -540,6 +313,6 @@ Software Engineering Student
 
 ---
 
-## ⭐ If you like this project
+## ⭐ Support
 
-Give it a ⭐ on GitHub and share it 🚀
+If you found this useful, consider giving it a ⭐ on GitHub 🚀
