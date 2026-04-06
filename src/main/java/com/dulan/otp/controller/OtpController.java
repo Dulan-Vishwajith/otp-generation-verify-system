@@ -1,5 +1,7 @@
 package com.dulan.otp.controller;
 
+import com.dulan.otp.dto.GenerateOtpRequest;
+import com.dulan.otp.dto.VerifyOtpRequest;
 import com.dulan.otp.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +15,13 @@ public class OtpController {
     private OtpService otpService;
 
     @PostMapping("/generate")
-    public String generateOtp(@RequestParam String phoneNumber){
-        return otpService.generateOtp(phoneNumber);
+    public String generateOtp(@RequestBody GenerateOtpRequest request){
+        return otpService.generateOtp(request.getPhoneNumber());
     }
 
     @PostMapping("/verify")
-    public String verifyOtp(@RequestParam String phoneNumber , @RequestParam int otp){
-        return otpService.verifyOtp(phoneNumber, otp);
+    public String verifyOtp(@RequestBody VerifyOtpRequest request){
+        return otpService.verifyOtp(request.getPhoneNumber(), request.getOtp());
     }
 
 
