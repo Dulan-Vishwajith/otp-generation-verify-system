@@ -253,6 +253,207 @@ Response → Frontend
 * OTP is deleted after successful verification
 
 ---
+## 📄 File-by-File Explanation
+
+This section explains the purpose of each file in the project.
+
+---
+
+### 📁 controller/OtpController.java
+
+👉 **Handles incoming HTTP requests**
+
+* Defines API endpoints:
+
+  * `POST /otp/generate`
+  * `POST /otp/verify`
+* Receives request data using DTO (`@RequestBody`)
+* Calls service layer to process logic
+
+💡 Think of this as:
+
+> “The entry point of the backend”
+
+---
+
+### 📁 service/OtpService.java
+
+👉 **Contains business logic**
+
+Responsibilities:
+
+* Generate OTP (6-digit random number)
+* Store OTP in database
+* Set expiration time (2 minutes)
+* Send OTP via SMS (Text.lk API)
+* Verify OTP (check correctness + expiry)
+* Delete OTP after verification
+
+💡 Think of this as:
+
+> “The brain of the application”
+
+---
+
+### 📁 repository/OtpRepository.java
+
+👉 **Handles database operations**
+
+* Extends `JpaRepository`
+* Provides built-in methods:
+
+  * `save()`
+  * `delete()`
+  * `findById()`
+* Custom method:
+
+  * `findByPhoneNumber(String phoneNumber)`
+
+💡 Think of this as:
+
+> “The communication layer with the database”
+
+---
+
+### 📁 entity/OtpEntity.java
+
+👉 **Represents database table**
+
+Fields:
+
+* `id` → Primary key
+* `phoneNumber` → User phone number
+* `otp` → Generated OTP
+* `expiryTime` → Expiration timestamp
+
+💡 Automatically mapped to a MySQL table by JPA
+
+💡 Think of this as:
+
+> “The structure of stored data”
+
+---
+
+### 📁 dto/GenerateOtpRequest.java
+
+👉 **DTO for OTP generation request**
+
+* Contains:
+
+  * `phoneNumber`
+
+Used in:
+
+```id="dto1"
+POST /otp/generate
+```
+
+💡 Converts incoming JSON → Java object
+
+---
+
+### 📁 dto/VerifyOtpRequest.java
+
+👉 **DTO for OTP verification**
+
+* Contains:
+
+  * `phoneNumber`
+  * `otp`
+
+Used in:
+
+```id="dto2"
+POST /otp/verify
+```
+
+💡 Keeps API clean and structured
+
+---
+
+### 📁 model/OtpData.java *(Optional / earlier step)*
+
+👉 Used when OTP was stored in memory (HashMap)
+
+* Contains:
+
+  * OTP
+  * Expiry time
+
+⚠️ Not needed after database integration
+
+---
+
+### 📁 application.properties
+
+👉 **Configuration file**
+
+Contains:
+
+* Database connection (MySQL)
+* JPA settings
+* Hibernate behavior
+
+Example:
+
+```id="cfg1"
+spring.datasource.url=jdbc:mysql://localhost:3306/otp_db
+spring.jpa.hibernate.ddl-auto=update
+```
+
+💡 Think of this as:
+
+> “Project settings and configuration”
+
+---
+
+### 📁 Frontend (index.html + script.js)
+
+👉 Simple UI to test backend
+
+* `index.html`
+
+  * Input fields for phone & OTP
+  * Buttons for actions
+
+* `script.js`
+
+  * Uses `fetch()` to call backend APIs
+  * Sends JSON requests
+  * Displays responses
+
+💡 Think of this as:
+
+> “User interface interacting with backend”
+
+---
+
+## 🧠 Overall Architecture
+
+```id="arch1"
+Controller → Service → Repository → Database
+        ↓
+     DTO Layer
+        ↓
+   External API (SMS)
+```
+
+---
+
+## 🎯 Summary
+
+Each layer has a clear responsibility:
+
+* **Controller** → Handles requests
+* **Service** → Processes logic
+* **Repository** → Talks to DB
+* **Entity** → Defines data
+* **DTO** → Transfers data
+* **Frontend** → Interacts with user
+
+👉 This structure follows **clean architecture principles**
+
+---
 
 ## 🚀 Future Improvements
 
